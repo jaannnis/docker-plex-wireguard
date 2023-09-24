@@ -26,12 +26,14 @@ ENV DEBIAN_FRONTEND="noninteractive" \
   PLEX_MEDIA_SERVER_INFO_DEVICE="Docker Container (LinuxServer.io)"
 
 RUN \
-  echo "**** install runtime packages ****" && \
+  echo "**** install runtime packages & wireguard ****" && \
   apt-get update && \
   apt-get install -y \
     jq \
     udev \
-    wget && \
+    wget \
+    iproute2 \
+    wireguard-tools &&\
   echo "**** install plex ****" && \
   if [ -z ${PLEX_RELEASE+x} ]; then \
     PLEX_RELEASE=$(curl -sX GET 'https://plex.tv/api/downloads/5.json' \
@@ -53,6 +55,9 @@ RUN \
 
 # add local files
 COPY root/ /
+
+# add wireguard config
+COPY ./wg0.conf /etc/wireguard/wg0.conf
 
 # add unrar
 COPY --from=unrar /usr/bin/unrar-ubuntu /usr/bin/unrar
