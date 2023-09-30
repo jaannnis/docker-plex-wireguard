@@ -56,8 +56,6 @@ RUN \
 # add local files
 COPY root/ /
 
-# add wireguard config
-COPY ./wg0.conf /etc/wireguard/wg0.conf
 
 # add unrar
 COPY --from=unrar /usr/bin/unrar-ubuntu /usr/bin/unrar
