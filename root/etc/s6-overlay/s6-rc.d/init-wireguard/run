@@ -1,10 +1,14 @@
 #!/usr/bin/with-contenv bash
+
 # Bring up WireGuard if not already up
 if ! ip link show dev wg0 > /dev/null 2>&1; then
     wg-quick up wg0
-else
-sleep 60
 fi
 
-# Exit after running
-exit 0
+# Monitor wireguard status
+while true; do
+    if ! ip link show dev wg0 | grep -q "UP"; then
+        wg-quick up wg0
+    fi
+    sleep 60
+done
